@@ -215,6 +215,50 @@
       margin-bottom:15px;
     }
 
+    /* Lock Overlay for Letter */
+    .letter-lock-overlay{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(246,243,237,0.95);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:10;
+      border-radius:20px;
+    }
+
+    .letter-lock-overlay.hidden{
+      display:none;
+    }
+
+    .lock-icon{
+      font-size:60px;
+      margin-bottom:20px;
+    }
+
+    .countdown-timer{
+      font-family:'Playfair Display', serif;
+      font-size:24px;
+      color:#C2185B;
+      margin-bottom:10px;
+      text-align:center;
+    }
+
+    .countdown-text{
+      font-family:'Montserrat', sans-serif;
+      font-size:16px;
+      color:#6F7F8F;
+      text-align:center;
+    }
+
+    #letter.tab-content{
+      position:relative;
+    }
+
     /* ============================================
        SONG SECTION
        ============================================ */
@@ -1210,6 +1254,11 @@
 
     <!-- LETTER -->
     <div id="letter" class="tab-content">
+      <div id="letterLockOverlay" class="letter-lock-overlay">
+        <div class="lock-icon">🔒</div>
+        <div class="countdown-timer" id="countdownTimer"></div>
+        <div class="countdown-text">This letter will unlock on February 14th 💕</div>
+      </div>
       <h2>Happy Valentines, my francis, hubby, bb, baby, mark!!</h2>
       <div class="letter-box">
         <p id="typedLetter"></p>
@@ -1422,6 +1471,54 @@
     // TAB NAVIGATION
     // ============================================
 
+    // Check if it's February 14
+    function isFebruary14(){
+      const now = new Date();
+      const month = now.getMonth() + 1; // getMonth() returns 0-11
+      const day = now.getDate();
+      return month === 2 && day === 14;
+    }
+
+    // Countdown timer for February 14
+    function updateCountdown(){
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      let targetDate = new Date(currentYear, 1, 14); // February 14 (month is 0-indexed)
+      
+      // If Feb 14 has passed this year, target next year
+      if(now > targetDate){
+        targetDate = new Date(currentYear + 1, 1, 14);
+      }
+
+      const diff = targetDate - now;
+      
+      if(diff <= 0){
+        // It's February 14!
+        document.getElementById("letterLockOverlay").classList.add("hidden");
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("countdownTimer").textContent = 
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    // Initialize countdown timer
+    function initLetterLock(){
+      if(isFebruary14()){
+        document.getElementById("letterLockOverlay").classList.add("hidden");
+      } else {
+        document.getElementById("letterLockOverlay").classList.remove("hidden");
+        updateCountdown();
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+      }
+    }
+
     function openTab(tabId){
       document.querySelectorAll('.tab-content').forEach(tab=>{
         tab.style.display="none";
@@ -1429,7 +1526,17 @@
 
       document.getElementById(tabId).style.display="block";
 
-      if(tabId === "letter") startTyping();
+      // Check if letter tab is locked
+      if(tabId === "letter"){
+        if(isFebruary14()){
+          document.getElementById("letterLockOverlay").classList.add("hidden");
+          startTyping();
+        } else {
+          document.getElementById("letterLockOverlay").classList.remove("hidden");
+          updateCountdown();
+        }
+      }
+
       if(tabId === "song") startSongTyping();
       if(tabId === "flower") startFlowerTyping();
     }
@@ -1701,6 +1808,9 @@ and how much I want to be loved by you.
         closeLightbox();
       }
     });
+
+    // Initialize letter lock on page load
+    initLetterLock();
 
   </script>
 
