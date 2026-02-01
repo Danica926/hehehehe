@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>hehehehe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+
+    /* ============================================
+       BASE STYLES
+       ============================================ */
+    
+    body{
+      margin:0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight:300;
+      background: #E0DDD6;
+      min-height:100vh;
+      max-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:#C2185B;
+      padding:10px;
+      overflow:hidden;
+    }
+
+    h2{
+      text-align:center;
+      color:#C2185B;
+      font-family:'Playfair Display', serif;
+      font-weight:500;
+      font-size:22px;
+      margin:0 0 15px 0;
+      letter-spacing:0.5px;
+    }
+
+    p{
+      color:#C2185B;
+      line-height:1.6;
+      font-weight:300;
+    }
+
+    /* ============================================
+       LAYOUT
+       ============================================ */
+
+    .container{
+      width:100%;
+      max-width:800px;
+      max-height:90vh;
+      background:#F6F3ED;
+      border-radius:20px;
+      padding:20px 25px;
+      box-shadow:0 8px 30px rgba(232,163,178,0.4), 0 0 0 1px rgba(232,163,178,0.2), 0 0 40px rgba(232,163,178,0.15);
+      position:relative;
+      z-index:1;
+      border:2px solid rgba(232,163,178,0.5);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .tab-content{
+      display:none;
+      animation:fade .3s ease;
+      flex:1;
+      overflow-y:visible;
+      overflow-x:hidden;
+      min-height:0;
+    }
+
+    /* Only surprise and letter sections have scrollbars */
+    #surprise.tab-content,
+    #letter.tab-content{
+      overflow-y:auto;
+      overflow-x:hidden;
+      max-height:100%;
+    }
+
+    .tab-content::-webkit-scrollbar{
+      width:8px;
+    }
+
+    .tab-content::-webkit-scrollbar-track{
+      background:rgba(232,163,178,0.15);
+      border-radius:10px;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb{
+      background:rgba(232,163,178,0.5);
+      border-radius:10px;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb:hover{
+      background:rgba(232,163,178,0.7);
+    }
+
+    /* ============================================
+       TABS
+       ============================================ */
+
+    .tabs{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:15px;
+      gap:5px;
+      flex-wrap:wrap;
+    }
+
+    .tabs button{
+      background:transparent;
+      border:none;
+      padding:10px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:18px;
+      transition:all 0.3s ease;
+      color:#C2185B;
+      position:relative;
+    }
+
+    .tabs button:hover{
+      background:rgba(194,24,91,0.15);
+      transform:translateY(-3px);
+      color:#C2185B;
+      box-shadow:0 4px 12px rgba(194,24,91,0.25);
+    }
+
+    .tabs button:active{
+      transform:translateY(-1px);
+      box-shadow:0 2px 6px rgba(194,24,91,0.2);
+    }
+
+    /* ============================================
+       BUTTONS
+       ============================================ */
+
+    button:not(.tabs button){
+      background:#C2185B;
+      color:#F6F5F2;
+      border:none;
+      padding:12px 24px;
+      border-radius:8px;
+      cursor:pointer;
+      font-family:'Montserrat', sans-serif;
+      font-weight:400;
+      font-size:14px;
+      transition:all 0.3s ease;
+      margin-top:15px;
+    }
+
+    button:not(.tabs button):hover{
+      background:#D81B60;
+      transform:translateY(-2px);
+    }
+
+    /* ============================================
+       GAME SECTION
+       ============================================ */
+
+    #gameArea{
+      width:400px;
+      height:400px;
+      background:#F2B8C6;
+      border-radius:20px;
+      margin:auto;
+      position:relative;
+      overflow:hidden;
+      border:2px solid rgba(232,163,178,0.4);
+    }
+
+    #bubu{
+      width:140px;
+      position:absolute;
+      cursor:pointer;
+    }
+
+    .score{
+      text-align:center;
+      margin-top:15px;
+      font-weight:400;
+      color:#C2185B;
+    }
+
+    #unlockMessage{
+      text-align:center;
+      color:#C2185B;
+      display:none;
+      font-weight:400;
+      font-family:'Playfair Display', serif;
+      margin-top:15px;
+      font-size:18px;
+    }
+
+    /* ============================================
+       LETTER SECTION
+       ============================================ */
+
+    .letter-box{
+      background:#F6F5F2;
+      padding:20px;
+      border-radius:12px;
+      font-family:'Montserrat', sans-serif;
+      font-weight:300;
+      min-height:180px;
+      line-height:2;
+      color:#C2185B;
+      border:1px solid rgba(194,24,91,0.2);
+    }
+
+    .letter-box p{
+      margin-bottom:15px;
+    }
+
+    /* ============================================
+       SONG SECTION
+       ============================================ */
+
+    .song-typing{
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #C2185B;
+      text-align: center;
+      min-height: 140px;
+      white-space: pre-line;
+    }
+
+    /* ============================================
+       FLOWER SECTION
+       ============================================ */
+
+    .tiger-lily-container{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin:20px 0;
+      animation:sway 3s ease-in-out infinite;
+    }
+
+    .lily-image{
+      max-width:280px;
+      width:100%;
+      height:auto;
+      border-radius:12px;
+      object-fit:contain;
+    }
+
+    .flower-typing{
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #C2185B;
+      text-align: center;
+      margin-top: 12px;
+      white-space: pre-line;
+      min-height: 140px;
+    }
+
+    /* ============================================
+       CARDS
+       ============================================ */
+
+    .card{
+      background:#F6F5F2;
+      padding:16px;
+      border-radius:10px;
+      margin:10px 0;
+      text-align:center;
+      border:1px solid rgba(194,24,91,0.2);
+      color:#C2185B;
+      font-weight:300;
+      transition:all 0.3s ease;
+    }
+
+    .card:hover{
+      background:rgba(194,24,91,0.15);
+      transform:translateY(-2px);
+    }
+
+    /* ============================================
+       SCRAPBOOK GALLERY
+       ============================================ */
+
+    .scrapbook-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));
+      gap:18px;
+      margin:20px 0;
+      padding:15px;
+    }
+
+    .scrapbook-image{
+      width:100%;
+      height:auto;
+      border:3px solid rgba(232,163,178,0.6);
+      border-radius:6px;
+      padding:4px;
+      background:#F6F5F2;
+      box-shadow:2px 3px 8px rgba(232,163,178,0.3);
+      transition:all 0.3s ease;
+      object-fit:cover;
+      aspect-ratio:1;
+      cursor:pointer;
+    }
+
+    .scrapbook-image:nth-child(odd){
+      transform:rotate(-1.5deg);
+    }
+
+    .scrapbook-image:nth-child(even){
+      transform:rotate(1.5deg);
+    }
+
+    .scrapbook-image:nth-child(3n){
+      transform:rotate(-0.8deg);
+    }
+
+    .scrapbook-image:nth-child(5n){
+      transform:rotate(2deg);
+    }
+
+    .scrapbook-image:hover{
+      transform:scale(1.08) rotate(0deg) !important;
+      box-shadow:4px 6px 15px rgba(196,122,133,0.4);
+      z-index:10;
+      position:relative;
+    }
+
+    /* Image Lightbox */
+    .image-lightbox{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.85);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:2000;
+      cursor:pointer;
+      animation:fadeIn 0.3s ease;
+    }
+
+    .image-lightbox.show{
+      display:flex;
+    }
+
+    .lightbox-image{
+      max-width:90%;
+      max-height:90vh;
+      border:4px solid rgba(232,163,178,0.7);
+      border-radius:12px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.5);
+      object-fit:contain;
+      animation:zoomIn 0.3s ease;
+    }
+
+    @keyframes zoomIn{
+      from{
+        transform:scale(0.8);
+        opacity:0;
+      }
+      to{
+        transform:scale(1);
+        opacity:1;
+      }
+    }
+
+    .scrapbook-text{
+      text-align:center;
+      color:#C2185B;
+      font-family:'Montserrat', sans-serif;
+      font-size:15px;
+      margin-top:20px;
+      font-style:italic;
+      font-weight:300;
+    }
+
+    /* ============================================
+       POPUP MODALS
+       ============================================ */
+
+    .popup-overlay{
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.5);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:1000;
+      animation:fadeIn 0.3s ease;
+    }
+
+    .popup-overlay.show{
+      display:flex;
+    }
+
+    .popup-container{
+      background:#F6F5F2;
+      border-radius:20px;
+      padding:35px;
+      max-width:450px;
+      width:90%;
+      box-shadow:0 10px 40px rgba(232,163,178,0.35);
+      border:2px solid rgba(232,163,178,0.4);
+      text-align:center;
+      animation:slideUp 0.4s ease;
+      position:relative;
+    }
+
+    .popup-image{
+      width:200px;
+      height:auto;
+      margin:0 auto 20px;
+      border-radius:15px;
+      display:block;
+    }
+
+    .popup-header{
+      font-family:'Playfair Display', serif;
+      font-size:28px;
+      color:#C2185B;
+      margin:0 0 15px 0;
+      font-weight:500;
+    }
+
+    .popup-message{
+      font-family:'Montserrat', sans-serif;
+      font-size:15px;
+      color:#C2185B;
+      line-height:1.8;
+      margin:0 0 15px 0;
+      font-weight:300;
+    }
+
+    .popup-whisper{
+      font-family:'Montserrat', sans-serif;
+      font-size:12px;
+      color:#C2185B;
+      line-height:1.6;
+      margin:10px 0 0 0;
+      font-weight:300;
+      font-style:italic;
+      opacity:0.8;
+    }
+
+    .popup-close{
+      position:absolute;
+      top:15px;
+      right:15px;
+      background:transparent;
+      border:none;
+      font-size:24px;
+      color:#C2185B;
+      cursor:pointer;
+      width:30px;
+      height:30px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      transition:all 0.3s ease;
+    }
+
+    .popup-close:hover{
+      background:rgba(194,24,91,0.2);
+      transform:rotate(90deg);
+    }
+
+    /* ============================================
+       FALLING PETALS
+       ============================================ */
+
+    .petal{
+      position:fixed;
+      top:-20px;
+      width:15px;
+      height:15px;
+      background:rgba(232,163,178,0.7);
+      border-radius:50% 50% 50% 0;
+      transform:rotate(45deg);
+      animation:fall linear infinite;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    /* ============================================
+       ANIMATIONS
+       ============================================ */
+
+    @keyframes fade{
+      from{opacity:0;}
+      to{opacity:1;}
+    }
+
+    @keyframes fadeIn{
+      from{opacity:0;}
+      to{opacity:1;}
+    }
+
+    @keyframes slideUp{
+      from{
+        transform:translateY(30px);
+        opacity:0;
+      }
+      to{
+        transform:translateY(0);
+        opacity:1;
+      }
+    }
+
+    @keyframes float{
+      from{transform:translateY(0);}
+      to{transform:translateY(-10px);}
+    }
+
+    @keyframes sway{
+      0%, 100%{transform:rotate(-2deg);}
+      50%{transform:rotate(2deg);}
+    }
+
+    @keyframes fall{
+      to{
+        transform:translateY(110vh) rotate(360deg);
+        opacity:0;
+      }
+    }
+
+    /* ============================================
+       CONFETTI
+       ============================================ */
+
+    .confetti{
+      position:fixed;
+      width:10px;
+      height:10px;
+      background:#C2185B;
+      top:-10px;
+      z-index:3000;
+      pointer-events:none;
+    }
+
+    .confetti:nth-child(odd){
+      background:#D81B60;
+    }
+
+    .confetti:nth-child(3n){
+      background:#1976D2;
+    }
+
+    .confetti:nth-child(4n){
+      background:#2196F3;
+    }
+
+    @keyframes confettiFall{
+      0%{
+        transform:translateY(0) rotate(0deg);
+        opacity:1;
+      }
+      100%{
+        transform:translateY(100vh) rotate(720deg);
+        opacity:0;
+      }
+    }
+
+    /* ============================================
+       QUIZ INTRO
+       ============================================ */
+
+    #quizIntro{
+      width:100%;
+      max-width:800px;
+      background:#F6F3ED;
+      border-radius:20px;
+      padding:20px 25px;
+      box-shadow:0 4px 20px rgba(232,163,178,0.2);
+      position:relative;
+      z-index:1;
+      border:1px solid rgba(232,163,178,0.3);
+      margin:auto;
+      text-align:center;
+      overflow:visible;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .intro-card{
+      background:#F6F5F2;
+      border-radius:15px;
+      padding:25px;
+      margin:20px 0;
+      border:2px solid rgba(232,163,178,0.4);
+      box-shadow:0 6px 15px rgba(232,163,178,0.25);
+      animation:cardFloat 3s ease-in-out infinite;
+      width:100%;
+      max-width:100%;
+      box-sizing:border-box;
+    }
+
+    @keyframes cardFloat{
+      0%, 100%{
+        transform:translateY(0) rotate(-1deg);
+      }
+      50%{
+        transform:translateY(-10px) rotate(1deg);
+      }
+    }
+
+    .intro-card img{
+      width:100%;
+      max-width:300px;
+      border-radius:12px;
+      margin-bottom:15px;
+      display:block;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .intro-message{
+      font-family:'Montserrat', sans-serif;
+      color:#C2185B;
+      font-size:16px;
+      font-weight:400;
+      margin:15px 0;
+    }
+
+    .intro-button{
+      padding:12px 30px;
+      background:#C2185B;
+      color:#F6F5F2;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-family:'Montserrat', sans-serif;
+      font-weight:400;
+      font-size:15px;
+      margin-top:20px;
+      transition:all 0.3s ease;
+    }
+
+    .intro-button:hover{
+      background:#D81B60;
+      transform:translateY(-2px);
+      box-shadow:0 4px 12px rgba(194,24,91,0.3);
+    }
+
+    .countdown-timer{
+      font-family:'Montserrat', sans-serif;
+      color:#C2185B;
+      font-size:18px;
+      margin:20px 0;
+      text-align:center;
+    }
+
+    .countdown-timer .time-unit{
+      display:inline-block;
+      margin:0 8px;
+      padding:10px 15px;
+      background:#F6F5F2;
+      border-radius:10px;
+      border:2px solid rgba(232,163,178,0.3);
+      min-width:80px;
+    }
+
+    .countdown-timer .time-value{
+      font-size:28px;
+      font-weight:500;
+      color:#C2185B;
+      display:block;
+      font-family:'Playfair Display', serif;
+    }
+
+    .countdown-timer .time-label{
+      font-size:12px;
+      color:#C2185B;
+      margin-top:5px;
+      text-transform:uppercase;
+    }
+
+    .countdown-message{
+      font-family:'Montserrat', sans-serif;
+      color:#C2185B;
+      font-size:16px;
+      margin-top:15px;
+      font-weight:400;
+    }
+
+
+    /* ============================================
+       QUIZ SECTION
+       ============================================ */
+
+    #quizContainer{
+      width:100%;
+      max-width:800px;
+      background:#F6F3ED;
+      border-radius:20px;
+      padding:20px 25px;
+      box-shadow:0 4px 20px rgba(232,163,178,0.2);
+      position:relative;
+      z-index:1;
+      border:1px solid rgba(232,163,178,0.3);
+      margin:auto;
+      display:none;
+      overflow-y:auto;
+      overflow-x:hidden;
+      max-height:90vh;
+    }
+
+    #quizContainer h1{
+      font-family:'Playfair Display', serif;
+      color:#C2185B;
+      text-align:center;
+      font-size:28px;
+      margin:0 0 20px 0;
+    }
+
+    .quiz-question{
+      margin-bottom:25px;
+      display:none;
+    }
+
+    .quiz-question.active{
+      display:block;
+      animation:fade 0.5s ease;
+    }
+
+    .quiz-question p{
+      font-family:'Montserrat', sans-serif;
+      color:#C2185B;
+      font-size:16px;
+      margin-bottom:12px;
+      font-weight:400;
+    }
+
+    .quiz-button{
+      margin:5px;
+      padding:10px 15px;
+      border:none;
+      background:#E8A3B2;
+      color:#F6F5F2;
+      border-radius:8px;
+      cursor:pointer;
+      font-family:'Montserrat', sans-serif;
+      font-weight:400;
+      transition:all 0.3s ease;
+    }
+
+    .quiz-button:hover{
+      background:#F2B8C6;
+      transform:translateY(-2px);
+    }
+
+    #quizScore{
+      font-size:18px;
+      margin-bottom:20px;
+      font-weight:500;
+      color:#C2185B;
+      text-align:center;
+      font-family:'Montserrat', sans-serif;
+    }
+
+    #quizRetryBtn{
+      display:none;
+      padding:12px 20px;
+      background:#C2185B;
+      color:#F6F5F2;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      font-family:'Montserrat', sans-serif;
+      margin:20px auto;
+      display:block;
+      transition:all 0.3s ease;
+    }
+
+    #quizRetryBtn:hover{
+      background:#D81B60;
+      transform:translateY(-2px);
+    }
+
+    .quiz-popup{
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.6);
+      justify-content:center;
+      align-items:center;
+      z-index:2000;
+      animation:fadeIn 0.3s ease;
+    }
+
+    .quiz-popup.show{
+      display:flex;
+    }
+
+    .quiz-popup-content{
+      background:#F6F5F2;
+      padding:30px;
+      border-radius:20px;
+      text-align:center;
+      max-width:400px;
+      width:90%;
+      border:2px solid rgba(232,163,178,0.4);
+      box-shadow:0 10px 40px rgba(232,163,178,0.3);
+    }
+
+    .quiz-popup-content img{
+      width:150px;
+      margin-bottom:15px;
+      border-radius:12px;
+    }
+
+    .quiz-popup-content p{
+      font-family:'Montserrat', sans-serif;
+      color:#C2185B;
+      font-size:16px;
+      margin-bottom:15px;
+    }
+
+    .quiz-popup-content button{
+      padding:10px 20px;
+      background:#C2185B;
+      color:#F6F5F2;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-family:'Montserrat', sans-serif;
+      transition:all 0.3s ease;
+    }
+
+    .quiz-popup-content button:hover{
+      background:#D81B60;
+    }
+
+    /* ============================================
+       MOBILE RESPONSIVE
+       ============================================ */
+
+    @media (max-width: 768px){
+      body{
+        padding:5px;
+        align-items:flex-start;
+        padding-top:10px;
+      }
+
+      .container{
+        max-width:100%;
+        width:100%;
+        padding:15px;
+        border-radius:15px;
+        min-height:95vh;
+        max-height:95vh;
+        height:auto;
+      }
+
+      #quizContainer{
+        max-width:100%;
+        width:100%;
+        padding:15px;
+        border-radius:15px;
+        max-height:95vh;
+      }
+
+      #quizIntro{
+        max-width:100%;
+        width:100%;
+        padding:15px;
+        border-radius:15px;
+      }
+
+      h2{
+        font-size:22px;
+      }
+
+      .tabs{
+        gap:4px;
+        margin-bottom:15px;
+      }
+
+      .tabs button{
+        padding:10px 12px;
+        font-size:18px;
+      }
+
+      .letter-box{
+        padding:18px;
+        font-size:15px;
+      }
+
+      .scrapbook-grid{
+        grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
+        gap:10px;
+      }
+
+      .scrapbook-image{
+        border-width:3px;
+      }
+
+      #gameArea{
+        width:100%;
+        max-width:400px;
+        height:400px;
+      }
+
+      #bubu{
+        width:140px;
+      }
+
+      .intro-card img{
+        max-width:280px;
+      }
+
+      .quiz-button{
+        padding:10px 15px;
+        font-size:15px;
+      }
+
+      .quiz-question p{
+        font-size:17px;
+      }
+
+      .popup-container{
+        width:90%;
+        max-width:380px;
+        padding:25px;
+      }
+
+      .popup-header{
+        font-size:26px;
+      }
+
+      .popup-message{
+        font-size:15px;
+      }
+
+      .song-typing, .flower-typing{
+        font-size:16px;
+      }
+
+      iframe{
+        height:180px !important;
+      }
+    }
+
+    @media (max-width: 480px){
+      body{
+        padding:3px;
+        padding-top:5px;
+      }
+
+      .container{
+        padding:12px;
+        border-radius:12px;
+        min-height:98vh;
+        max-height:98vh;
+      }
+
+      #quizContainer{
+        padding:12px;
+        border-radius:12px;
+        max-height:98vh;
+      }
+
+      #quizIntro{
+        padding:12px;
+        border-radius:12px;
+      }
+
+      h2{
+        font-size:20px;
+        margin:0 0 15px 0;
+      }
+
+      .tabs{
+        gap:3px;
+        margin-bottom:12px;
+      }
+
+      .tabs button{
+        padding:8px 10px;
+        font-size:16px;
+      }
+
+      .letter-box{
+        padding:15px;
+        font-size:14px;
+      }
+
+      .scrapbook-grid{
+        grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));
+        gap:8px;
+      }
+
+      #gameArea{
+        max-width:350px;
+        height:350px;
+      }
+
+      #bubu{
+        width:130px;
+      }
+
+      .intro-card img{
+        max-width:250px;
+      }
+
+      .quiz-button{
+        padding:9px 13px;
+        font-size:14px;
+      }
+
+      .quiz-question p{
+        font-size:16px;
+      }
+
+      .popup-container{
+        width:92%;
+        max-width:340px;
+        padding:20px;
+      }
+
+      .popup-header{
+        font-size:24px;
+      }
+
+      .popup-message{
+        font-size:14px;
+      }
+
+      .song-typing, .flower-typing{
+        font-size:15px;
+      }
+
+      iframe{
+        height:160px !important;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- QUIZ INTRO -->
+  <div id="quizIntro">
+    <h1 style="font-family:'Playfair Display', serif; color:#C2185B; font-size:28px; margin:0 0 20px 0;">Welcome, Baby 💖</h1>
+    <div class="intro-card">
+      <img src="images/26.jpg" alt="Intro Image">
+      <p class="intro-message">If u got it all right, i will let u in. mwehehe</p>
+    </div>
+    <button class="intro-button" onclick="startQuiz()">Start Challenge 💪</button>
+  </div>
+
+
+  <!-- QUIZ SECTION -->
+  <div id="quizContainer">
+    <h1>How Well Do You Know Me? 💖</h1>
+    <div id="quizScore">Score: 0 / 6</div>
+
+    <div class="quiz-question active" id="question1">
+      <p>1. Hmm, do you know how old I am?</p>
+      <button class="quiz-button" onclick="q1('A')">21</button>
+      <button class="quiz-button" onclick="q1('B')">22</button>
+      <button class="quiz-button" onclick="q1('C')">23</button>
+    </div>
+
+    <div class="quiz-question" id="question2">
+      <p>2. What do I mostly do at home?</p>
+      <button class="quiz-button" onclick="q2('A')">Sleep</button>
+      <button class="quiz-button" onclick="q2('B')">Play games with you</button>
+      <button class="quiz-button" onclick="q2('C')">Study</button>
+    </div>
+
+    <div class="quiz-question" id="question3">
+      <p>3. When did we first meet?</p>
+      <button class="quiz-button" onclick="q3('A')">July 6</button>
+      <button class="quiz-button" onclick="q3('B')">July 4</button>
+      <button class="quiz-button" onclick="q3('C')">July 2</button>
+    </div>
+
+    <div class="quiz-question" id="question4">
+      <p>4. If I didn't reply immediately, I'm probably:</p>
+      <button class="quiz-button" onclick="q4('A')">Sleeping</button>
+      <button class="quiz-button" onclick="q4('B')">Talking to someone</button>
+      <button class="quiz-button" onclick="q4('C')">Mad</button>
+    </div>
+
+    <div class="quiz-question" id="question5">
+      <p>5. What part of you do I love the most?</p>
+      <button class="quiz-button" onclick="q5('A')">Lips</button>
+      <button class="quiz-button" onclick="q5('B')">Butt hehe</button>
+      <button class="quiz-button" onclick="q5('C')">Eyes</button>
+    </div>
+
+    <div class="quiz-question" id="question6">
+      <p>6. What makes me the happiest?</p>
+      <button class="quiz-button" onclick="q6('A')">Food</button>
+      <button class="quiz-button" onclick="q6('B')">My baby Mark Francis</button>
+      <button class="quiz-button" onclick="q6('C')">I don't know, bruh</button>
+    </div>
+
+    <button id="quizRetryBtn" onclick="location.reload()">Retry 💔</button>
+
+    <!-- QUIZ POPUP -->
+    <div class="quiz-popup" id="quizPopup">
+      <div class="quiz-popup-content">
+        <img id="quizPopupImg">
+        <p id="quizPopupText"></p>
+        <button onclick="closeQuizPopup()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="mainContainer" style="display:none;">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button onclick="openTab('greet')" title="Greeting">💌</button>
+      <button onclick="openTab('song')" title="Song">🎵</button>
+      <button onclick="openTab('flower')" title="Flower">🌸</button>
+      <button onclick="openTab('game')" title="Game">🎮</button>
+      <button onclick="openTab('surprise')" title="Surprise">💖</button>
+      <button onclick="openTab('letter')" title="Letter">📜</button>
+    </div>
+
+    <!-- TAB CONTENT SECTIONS -->
+    
+    <!-- GREETING -->
+    <div id="greet" class="tab-content" style="text-align:center;">
+      <h2>i made this especially for u bb hehe</h2>
+      <p style="text-align:center; line-height:1.8; color:#C2185B;">i know u know how i made this with just ai, some prompts, and such but at least i made this with love, time, and my poor english skills huhu. i hope u appreciate my small gift for u&lt;3</p>
+    </div>
+
+    <!-- SONG -->
+    <div id="song" class="tab-content">
+      <h2>i dedicate this song for u mwehehe</h2>
+      <p id="songTyped" class="song-typing"></p>
+      <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/3g7ngtg7xK3N9nKwAjDfH3?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+    <!-- FLOWER -->
+    <div id="flower" class="tab-content">
+      <h2>For You 🌷</h2>
+      <div class="tiger-lily-container">
+        <img src="images/lily.jpg" alt="Lily" class="lily-image">
+      </div>
+      <p id="flowerTyped" class="flower-typing"></p>
+    </div>
+
+    <!-- GAME -->
+    <div id="game" class="tab-content" style="text-align:center;">
+      <h2>Catch Bubu</h2>
+      <div id="gameArea">
+        <img id="bubu" src="images/bubu.png">
+      </div>
+      <p>Time left: <span id="timeLeft">7</span>s</p>
+      <p>Caught: <span id="score">0</span>/11</p>
+      <p id="unlockMessage" style="display:none;">💖 You unlocked my love! 💖</p>
+      <p id="failMessage" style="display:none;">😢 Time's up! Try again!</p>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <!-- SURPRISE -->
+    <div id="surprise" class="tab-content">
+      <h2>look baby!!</h2>
+      <div class="scrapbook-grid">
+        <img src="images/1.jpg" alt="Photo 1" class="scrapbook-image" onclick="openLightbox('images/1.jpg')">
+        <img src="images/2.jpg" alt="Photo 2" class="scrapbook-image" onclick="openLightbox('images/2.jpg')">
+        <img src="images/3.jpg" alt="Photo 3" class="scrapbook-image" onclick="openLightbox('images/3.jpg')">
+        <img src="images/4.jpg" alt="Photo 4" class="scrapbook-image" onclick="openLightbox('images/4.jpg')">
+        <img src="images/5.jpg" alt="Photo 5" class="scrapbook-image" onclick="openLightbox('images/5.jpg')">
+        <img src="images/6.jpg" alt="Photo 6" class="scrapbook-image" onclick="openLightbox('images/6.jpg')">
+        <img src="images/7.jpg" alt="Photo 7" class="scrapbook-image" onclick="openLightbox('images/7.jpg')">
+        <img src="images/8.jpg" alt="Photo 8" class="scrapbook-image" onclick="openLightbox('images/8.jpg')">
+        <img src="images/9.jpg" alt="Photo 9" class="scrapbook-image" onclick="openLightbox('images/9.jpg')">
+        <img src="images/10.jpg" alt="Photo 10" class="scrapbook-image" onclick="openLightbox('images/10.jpg')">
+        <img src="images/11.jpg" alt="Photo 11" class="scrapbook-image" onclick="openLightbox('images/11.jpg')">
+        <img src="images/12.jpg" alt="Photo 12" class="scrapbook-image" onclick="openLightbox('images/12.jpg')">
+        <img src="images/13.jpg" alt="Photo 13" class="scrapbook-image" onclick="openLightbox('images/13.jpg')">
+        <img src="images/14.jpg" alt="Photo 14" class="scrapbook-image" onclick="openLightbox('images/14.jpg')">
+      </div>
+      <p class="scrapbook-text">these are my favorite pictures of us hehehe</p>
+      <div class="scrapbook-grid" style="margin-top:20px;">
+        <img src="images/15.jpg" alt="Photo 15" class="scrapbook-image" onclick="openLightbox('images/15.jpg')">
+        <img src="images/16.jpg" alt="Photo 16" class="scrapbook-image" onclick="openLightbox('images/16.jpg')">
+        <img src="images/17.jpg" alt="Photo 17" class="scrapbook-image" onclick="openLightbox('images/17.jpg')">
+        <img src="images/18.jpg" alt="Photo 18" class="scrapbook-image" onclick="openLightbox('images/18.jpg')">
+        <img src="images/19.jpg" alt="Photo 19" class="scrapbook-image" onclick="openLightbox('images/19.jpg')">
+        <img src="images/20.jpg" alt="Photo 20" class="scrapbook-image" onclick="openLightbox('images/20.jpg')">
+        <img src="images/21.jpg" alt="Photo 21" class="scrapbook-image" onclick="openLightbox('images/21.jpg')">
+        <img src="images/22.jpg" alt="Photo 22" class="scrapbook-image" onclick="openLightbox('images/22.jpg')">
+        <img src="images/23.jpg" alt="Photo 23" class="scrapbook-image" onclick="openLightbox('images/23.jpg')">
+        <img src="images/24.jpg" alt="Photo 24" class="scrapbook-image" onclick="openLightbox('images/24.jpg')">
+        <img src="images/25.jpg" alt="Photo 25" class="scrapbook-image" onclick="openLightbox('images/25.jpg')">
+      </div>
+      <p class="scrapbook-text" style="margin-top:20px;">while these are my favorite photos u hehe, u look so wafu bb mwa :**</p>
+    </div>
+
+    <!-- LETTER -->
+    <div id="letter" class="tab-content">
+      <h2>Happy Valentines, my francis, hubby, bb, baby, mark!!</h2>
+      <div class="letter-box">
+        <p id="typedLetter"></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- POPUP MODALS -->
+  
+  <!-- Win Popup -->
+  <div id="winPopup" class="popup-overlay">
+    <div class="popup-container">
+      <button class="popup-close" onclick="closeWinPopup()">×</button>
+      <img src="images/bubukiss.webp" alt="Bubu Kiss" class="popup-image">
+      <h2 class="popup-header">yayy! I love u, baby :3</h2>
+      <p class="popup-message">you have caught 11 bubu in 7 seconds, you successfully saved bubu just like how you saved nini, you are always there when she needs u most. just like bubu, nini feels safe whenever you are beside her. she will always be grateful you exist.</p>
+      <p class="popup-whisper">and yk, just to remind u we agreed to July 11th as our official date :P</p>
+    </div>
+  </div>
+
+  <!-- Fail Popup -->
+  <div id="failPopup" class="popup-overlay">
+    <div class="popup-container">
+      <button class="popup-close" onclick="closeFailPopup()">×</button>
+      <img src="images/bubusad.webp" alt="Bubu Sad" class="popup-image">
+      <h2 class="popup-header">u failed to saved bubu :(</h2>
+      <p class="popup-message">don't u love nini, baby? T^T</p>
+    </div>
+  </div>
+
+  <!-- Image Lightbox -->
+  <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+    <img id="lightboxImage" src="" alt="Full size image" class="lightbox-image">
+  </div>
+
+  <script>
+
+    // ============================================
+    // QUIZ FUNCTIONALITY
+    // ============================================
+
+    let quizScore = 0;
+    let quizAnswered = [false,false,false,false,false,false];
+
+    // ============================================
+    // VALENTINE'S DAY COUNTDOWN
+    // ============================================
+
+
+    function startQuiz(){
+      document.getElementById("quizIntro").style.display = "none";
+      document.getElementById("quizContainer").style.display = "block";
+    }
+
+
+    function updateQuizScore(){
+      document.getElementById("quizScore").innerText = `Score: ${quizScore} / 6`;
+    }
+
+    function showQuizPopup(img,text){
+      document.getElementById("quizPopupImg").src = img;
+      document.getElementById("quizPopupText").innerText = text;
+      document.getElementById("quizPopup").classList.add("show");
+    }
+
+    function showNextQuestion(currentIndex){
+      // Hide current question
+      document.getElementById(`question${currentIndex + 1}`).classList.remove("active");
+      
+      // Show next question if not the last one
+      if(currentIndex < 5){
+        setTimeout(() => {
+          document.getElementById(`question${currentIndex + 2}`).classList.add("active");
+        }, 300);
+      }
+    }
+
+    function closeQuizPopup(){
+      document.getElementById("quizPopup").classList.remove("show");
+      checkQuizEnd();
+    }
+
+    function markQuizCorrect(index){
+      if(!quizAnswered[index]){
+        quizScore++;
+        quizAnswered[index] = true;
+        updateQuizScore();
+      }
+    }
+
+    function createConfetti(){
+      const colors = ['#C2185B', '#D81B60', '#1976D2', '#2196F3'];
+      const confettiCount = 100;
+      
+      for(let i = 0; i < confettiCount; i++){
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = (Math.random() * 8 + 6) + 'px';
+        confetti.style.height = (Math.random() * 8 + 6) + 'px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
+    }
+
+    function checkQuizEnd(){
+      if(quizAnswered.every(x => x === true)){
+        if(quizScore === 6){
+          createConfetti();
+          showQuizPopup("images/mwamwa.webp","congrats bb, im proud of u! mwaaaa~");
+          setTimeout(() => {
+            document.getElementById("quizContainer").style.display = "none";
+            document.getElementById("mainContainer").style.display = "flex";
+            openTab("greet");
+            startFallingPetals();
+          }, 2000);
+        } else {
+          document.getElementById("quizRetryBtn").style.display = "block";
+        }
+      }
+    }
+
+    // Q1
+    function q1(ans){
+      if(ans==='B'){
+        markQuizCorrect(0);
+        showQuizPopup("images/bubuhappy.webp","that's right, baby");
+      } else {
+        showQuizPopup("images/bubumad.webp","u don't know me, huh? am i your gf?");
+      }
+      showNextQuestion(0);
+    }
+
+    // Q2
+    function q2(ans){
+      if(ans==='B'){
+        markQuizCorrect(1);
+        showQuizPopup("images/bubuhappy.webp","that's right, baby");
+      } else {
+        showQuizPopup("images/bubumad.webp","u don't know me, huh? am i your gf?");
+      }
+      showNextQuestion(1);
+    }
+
+    // Q3
+    function q3(ans){
+      if(ans==='C'){
+        markQuizCorrect(2);
+        showQuizPopup("images/bubuhappy.webp","waaaa of course, u know it hehe");
+      } else {
+        showQuizPopup("images/bubusad.webp","aww, really? :(");
+      }
+      showNextQuestion(2);
+    }
+
+    // Q4
+    function q4(ans){
+      if(ans==='A'){
+        markQuizCorrect(3);
+        showQuizPopup("images/bubuhappy.webp","hehe u got it right");
+      }
+      else if(ans==='C'){
+        showQuizPopup("images/bubusad.webp","no, baby. i cant get mad at u :33");
+      }
+      else{
+        showQuizPopup("images/bubusad.webp","aww, no :(");
+      }
+      showNextQuestion(3);
+    }
+
+    // Q5
+    function q5(ans){
+      if(ans==='C'){
+        markQuizCorrect(4);
+        showQuizPopup("images/bubuhappy.webp","i actually love all of u bb but ur eyes will always get me hehe");
+      }
+      else if(ans==='B'){
+        showQuizPopup("images/bubuhehe.webp","hehe wrong but i like ur butt tho");
+      }
+      else{
+        showQuizPopup("images/bubusad.webp","aww, no :(");
+      }
+      showNextQuestion(4);
+    }
+
+    // Q6
+    function q6(ans){
+      if(ans==='C'){
+        markQuizCorrect(5);
+        showQuizPopup("images/bubuhappy.webp","yayy, got u baby. i love u so much as much as i love eating :P");
+      }
+      else if(ans==='B'){
+        showQuizPopup("images/bubuhehe.webp","u are right but uhm... maybe choose another answer?");
+      }
+      else{
+        showQuizPopup("images/bubuhehe.webp","uhm yes definitely, but no hehe");
+      }
+      showNextQuestion(5);
+    }
+
+    // ============================================
+    // TAB NAVIGATION
+    // ============================================
+
+    function openTab(tabId){
+      document.querySelectorAll('.tab-content').forEach(tab=>{
+        tab.style.display="none";
+      });
+
+      document.getElementById(tabId).style.display="block";
+
+      if(tabId === "letter") startTyping();
+      if(tabId === "song") startSongTyping();
+      if(tabId === "flower") startFlowerTyping();
+    }
+
+    // Don't open tab until quiz is complete
+    // openTab("greet");
+
+    // ============================================
+    // TYPING ANIMATIONS
+    // ============================================
+
+    // Letter Typing
+    const letterText = `Before us, before everything we've shared, I want to start with you.
+
+Honestly, I wasn't expecting a lot back then — or anything ahead of us, bb. Okay lang sakin lahat ng nangyayari noon, the late-night talks, playing Grow a Garden together. I wasn't hoping for more, I just felt comfortable with you.
+
+But I want you to know how much you amaze me every day — the way you appreciate things deeply, the way you feel and see the world differently, the way you show your love in your own unique way. And somehow, loving you feels like finding the perfect song I never knew I was searching for.
+
+We've already shared so many moments, but one of the most memorable for me was the day we went to eat shawarma.
+
+The sky looked bluer than usual, and because of my bad eyesight, I couldn't find you at first. My heart skipped a beat when you suddenly appeared out of nowhere — messy hair, that smirk to die for, one hand reaching for mine and the other for my bag.
+
+By that time, I was falling harder for you, especially when we walked together on the rain-wet streets. You looked at me with so much warmth. I started daydreaming about your smile more often, thinking of more ways just to hear you laugh.
+
+Even in our quiet moments in your room, I love listening to your heartbeat.
+
+You walked into my life and changed my rhythm. You filled spaces I didn't even know were empty. You healed a heart you didn't break. You made me feel that it's okay to be me — to be who I am today.
+
+I'm grateful for every second with you.
+
+Happy Valentine's Day, hubby.
+
+I love you more than words could ever explain.`;
+
+    let index = 0;
+    const speed = 40;
+
+    function typeLetter(){
+      if(index < letterText.length){
+        const char = letterText.charAt(index);
+        
+        // Handle line breaks for paragraphs
+        if(char === '\n' && letterText.charAt(index - 1) === '\n'){
+          document.getElementById("typedLetter").innerHTML += '<br><br>';
+        } else if(char === '\n'){
+          document.getElementById("typedLetter").innerHTML += '<br>';
+        } else {
+          document.getElementById("typedLetter").innerHTML += char;
+        }
+        
+        index++;
+        setTimeout(typeLetter, speed);
+      }
+    }
+
+    function startTyping(){
+      document.getElementById("typedLetter").innerHTML="";
+      index=0;
+      typeLetter();
+    }
+
+    // Song Typing
+    const songText = `
+u were the first person to introduce this band to me,   
+and the first time we listened to this song together in my room,   
+my heart felt nervous and warm all at once.
+
+every word felt familiar,   
+like the song was telling our story.
+
+now it will always remind me of u,   
+and the way i slowly learn to love u.
+`;
+
+    let songIndex = 0;
+
+    function typeSongText(){
+      if(songIndex < songText.length){
+        document.getElementById("songTyped").innerHTML += songText.charAt(songIndex);
+        songIndex++;
+        setTimeout(typeSongText, 35);
+      }
+    }
+
+    function startSongTyping(){
+      songIndex = 0;
+      document.getElementById("songTyped").innerHTML = "";
+      typeSongText();
+    }
+
+    // Flower Typing
+    const flowerText = `
+hi bb, i chose a lily for you because it means "I dare you to love me." 
+
+it's my little challenge to your heart —   
+to love me as much as I love you.
+
+and just like this flower,   
+it will always remind me of how much I care for you,   
+and how much I want to be loved by you.
+`;
+
+    let flowerIndex = 0;
+
+    function typeFlowerText(){
+      if(flowerIndex < flowerText.length){
+        document.getElementById("flowerTyped").innerHTML += flowerText.charAt(flowerIndex);
+        flowerIndex++;
+        setTimeout(typeFlowerText, 35);
+      }
+    }
+
+    function startFlowerTyping(){
+      flowerIndex = 0;
+      document.getElementById("flowerTyped").innerHTML = "";
+      typeFlowerText();
+    }
+
+    // ============================================
+    // MINI GAME
+    // ============================================
+
+    const target = document.getElementById("bubu");
+    const scoreText = document.getElementById("score");
+    const timeText = document.getElementById("timeLeft");
+    const winMsg = document.getElementById("unlockMessage");
+    const failMsg = document.getElementById("failMessage");
+
+    let score = 0;
+    let time = 7;
+    let timer;
+
+    function randomPosition(){
+      const area = document.getElementById("gameArea");
+      const maxX = area.clientWidth - 140;
+      const maxY = area.clientHeight - 140;
+
+      target.style.left = Math.random() * maxX + "px";
+      target.style.top = Math.random() * maxY + "px";
+    }
+
+    function startGame(){
+      score = 0;
+      time = 7;
+
+      scoreText.innerText = score;
+      timeText.innerText = time;
+
+      winMsg.style.display = "none";
+      failMsg.style.display = "none";
+
+      target.style.display = "block";
+      randomPosition();
+
+      clearInterval(timer);
+
+      timer = setInterval(()=>{
+        time -= 0.1;
+        timeText.innerText = time.toFixed(1);
+
+        if(time <= 0){
+          endGame(false);
+        }
+      },100);
+    }
+
+    function endGame(won){
+      clearInterval(timer);
+      target.style.display = "none";
+
+      if(won){
+        const popup = document.getElementById("winPopup");
+        popup.classList.add("show");
+        winMsg.style.display = "block";
+      } else {
+        const popup = document.getElementById("failPopup");
+        popup.classList.add("show");
+        failMsg.style.display = "block";
+      }
+    }
+
+    target.addEventListener("click",()=>{
+      score++;
+      scoreText.innerText = score;
+
+      if(score >= 11){
+        endGame(true);
+        return;
+      }
+
+      randomPosition();
+    });
+
+    // ============================================
+    // POPUP FUNCTIONS
+    // ============================================
+
+    function closeWinPopup(){
+      const popup = document.getElementById("winPopup");
+      popup.classList.remove("show");
+    }
+
+    function closeFailPopup(){
+      const popup = document.getElementById("failPopup");
+      popup.classList.remove("show");
+    }
+
+    // Close popup when clicking outside
+    document.getElementById("winPopup").addEventListener("click", function(e){
+      if(e.target === this){
+        closeWinPopup();
+      }
+    });
+
+    document.getElementById("failPopup").addEventListener("click", function(e){
+      if(e.target === this){
+        closeFailPopup();
+      }
+    });
+
+    // ============================================
+    // FALLING PETALS
+    // ============================================
+
+    function createFallingPetal(){
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      
+      const left = Math.random() * 100;
+      petal.style.left = left + '%';
+      
+      const duration = 3 + Math.random() * 3;
+      petal.style.animationDuration = duration + 's';
+      petal.style.animationDelay = Math.random() * 2 + 's';
+      
+      document.body.appendChild(petal);
+      
+      setTimeout(() => {
+        petal.remove();
+      }, (duration + 2) * 1000);
+    }
+
+    function startFallingPetals(){
+      createFallingPetal();
+      setInterval(createFallingPetal, 500);
+    }
+
+    startFallingPetals();
+
+    // ============================================
+    // IMAGE LIGHTBOX
+    // ============================================
+
+    function openLightbox(imageSrc){
+      const lightbox = document.getElementById("imageLightbox");
+      const lightboxImg = document.getElementById("lightboxImage");
+      lightboxImg.src = imageSrc;
+      lightbox.classList.add("show");
+    }
+
+    function closeLightbox(){
+      const lightbox = document.getElementById("imageLightbox");
+      lightbox.classList.remove("show");
+    }
+
+    // Close lightbox with Escape key
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape"){
+        closeLightbox();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
