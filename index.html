@@ -260,6 +260,114 @@
     }
 
     /* ============================================
+       PHOTOBOOTH SECTION
+       ============================================ */
+
+    .photobooth-layout{
+      display:flex;
+      gap:20px;
+      align-items:flex-start;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+
+    .photobooth-left,
+    .photobooth-right{
+      flex:1 1 260px;
+    }
+
+    #photoVideo{
+      width:100%;
+      max-width:360px;
+      border-radius:16px;
+      background:#000;
+      border:2px solid rgba(194,24,91,0.3);
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .photobooth-buttons{
+      margin-top:12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:center;
+    }
+
+    .photobooth-hint{
+      font-size:13px;
+      margin-top:8px;
+      font-style:italic;
+    }
+
+    .photobooth-previews{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .preview-slot{
+      width:100%;
+      max-width:220px;
+      height:90px;
+      object-fit:cover;
+      border-radius:10px;
+      border:2px dashed rgba(194,24,91,0.4);
+      background:#F6F5F2;
+      opacity:0.4;
+      align-self:center;
+    }
+
+    .film-strip{
+      margin-top:10px;
+      background:#111;
+      padding:10px 8px;
+      border-radius:14px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      align-items:center;
+      box-shadow:0 6px 16px rgba(0,0,0,0.3);
+    }
+
+    .film-frame{
+      width:80%;
+      max-width:220px;
+      border-radius:8px;
+      border:3px solid #333;
+      object-fit:cover;
+    }
+
+    .album-title{
+      margin-top:24px;
+      text-align:center;
+      font-family:'Playfair Display', serif;
+      color:#C2185B;
+      font-size:20px;
+    }
+
+    .album-grid{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+    }
+
+    .album-item{
+      background:#F6F5F2;
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(194,24,91,0.3);
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .album-item .film-strip{
+      margin-top:0;
+      box-shadow:none;
+      background:#111;
+    }
+
+    /* ============================================
        SONG SECTION
        ============================================ */
 
@@ -1176,6 +1284,7 @@
       <button onclick="openTab('flower')" title="Flower">🌸</button>
       <button onclick="openTab('game')" title="Game">🎮</button>
       <button onclick="openTab('surprise')" title="Surprise">💖</button>
+      <button onclick="openTab('photobooth')" title="Photobooth">📷</button>
       <button onclick="openTab('letter')" title="Letter">📜</button>
     </div>
 
@@ -1252,6 +1361,43 @@
       <p class="scrapbook-text" style="margin-top:20px;">while these are my favorite photos u hehe, u look so wafu bb mwa :**</p>
     </div>
 
+    <!-- PHOTOBOOTH -->
+    <div id="photobooth" class="tab-content">
+      <h2>Photobooth 📷</h2>
+
+      <div class="photobooth-layout">
+        <div class="photobooth-left">
+          <video id="photoVideo" autoplay playsinline></video>
+
+          <div class="photobooth-buttons">
+            <button onclick="startCamera()">Start Camera</button>
+            <button onclick="capturePhoto()">Capture</button>
+            <button onclick="restartPhotobooth()">Restart</button>
+            <button onclick="saveFilmStrip()">Save to Album</button>
+          </div>
+
+          <p class="photobooth-hint">Take 3 photos to create a cute film strip 💕</p>
+        </div>
+
+        <div class="photobooth-right">
+          <h3>Preview</h3>
+          <div class="photobooth-previews">
+            <img id="preview1" class="preview-slot" alt="Preview 1">
+            <img id="preview2" class="preview-slot" alt="Preview 2">
+            <img id="preview3" class="preview-slot" alt="Preview 3">
+          </div>
+
+          <h3 style="margin-top:16px;">Film Strip</h3>
+          <div id="filmStripContainer"></div>
+        </div>
+      </div>
+
+      <canvas id="captureCanvas" width="400" height="300" style="display:none;"></canvas>
+
+      <h3 class="album-title">Our Photobooth Album</h3>
+      <div id="photoAlbum" class="album-grid"></div>
+    </div>
+
     <!-- LETTER -->
     <div id="letter" class="tab-content">
       <div id="letterLockOverlay" class="letter-lock-overlay">
@@ -1303,11 +1449,6 @@
 
     let quizScore = 0;
     let quizAnswered = [false,false,false,false,false,false];
-
-    // ============================================
-    // VALENTINE'S DAY COUNTDOWN
-    // ============================================
-
 
     function startQuiz(){
       document.getElementById("quizIntro").style.display = "none";
@@ -1370,6 +1511,119 @@
           confetti.remove();
         }, 5000);
       }
+    }
+
+    // ============================================
+    // PHOTOBOOTH
+    // ============================================
+
+    const photoVideo = document.getElementById("photoVideo");
+    const captureCanvas = document.getElementById("captureCanvas");
+    const captureCtx = captureCanvas ? captureCanvas.getContext("2d") : null;
+    const previewSlots = [
+      document.getElementById("preview1"),
+      document.getElementById("preview2"),
+      document.getElementById("preview3")
+    ];
+    const filmStripContainer = document.getElementById("filmStripContainer");
+    const photoAlbum = document.getElementById("photoAlbum");
+
+    let videoStream = null;
+    let capturedImages = [];
+
+    async function startCamera(){
+      try{
+        if(videoStream) return;
+        if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+          alert("Camera is not supported in this browser, bb :(");
+          return;
+        }
+        videoStream = await navigator.mediaDevices.getUserMedia({ video:true });
+        photoVideo.srcObject = videoStream;
+      }catch(err){
+        alert("Nini can't access your camera, baby. Please allow camera permission.");
+      }
+    }
+
+    function capturePhoto(){
+      if(!photoVideo || !captureCanvas || !captureCtx) return;
+      if(!videoStream){
+        startCamera();
+        return;
+      }
+
+      if(capturedImages.length >= 3){
+        alert("You already took 3 photos, bb. Press Restart if you want to try again.");
+        return;
+      }
+
+      const width = photoVideo.videoWidth || 400;
+      const height = photoVideo.videoHeight || 300;
+      captureCanvas.width = width;
+      captureCanvas.height = height;
+      captureCtx.drawImage(photoVideo, 0, 0, width, height);
+
+      const dataUrl = captureCanvas.toDataURL("image/png");
+      capturedImages.push(dataUrl);
+
+      const idx = capturedImages.length - 1;
+      if(previewSlots[idx]){
+        previewSlots[idx].src = dataUrl;
+        previewSlots[idx].style.opacity = "1";
+      }
+
+      updateFilmStrip();
+    }
+
+    function updateFilmStrip(){
+      filmStripContainer.innerHTML = "";
+      if(capturedImages.length === 0) return;
+
+      const strip = document.createElement("div");
+      strip.className = "film-strip";
+
+      capturedImages.forEach(src => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.className = "film-frame";
+        strip.appendChild(img);
+      });
+
+      filmStripContainer.appendChild(strip);
+    }
+
+    function restartPhotobooth(){
+      capturedImages = [];
+      previewSlots.forEach(p => {
+        if(p){
+          p.src = "";
+          p.style.opacity = "0.4";
+        }
+      });
+      filmStripContainer.innerHTML = "";
+    }
+
+    function saveFilmStrip(){
+      if(capturedImages.length !== 3){
+        alert("Take 3 photos first before saving, bb!");
+        return;
+      }
+
+      if(!filmStripContainer.firstChild){
+        updateFilmStrip();
+      }
+
+      const stripClone = filmStripContainer.firstChild.cloneNode(true);
+      const item = document.createElement("div");
+      item.className = "album-item";
+      item.appendChild(stripClone);
+      photoAlbum.prepend(item);
+
+      restartPhotobooth();
+    }
+
+    function initPhotobooth(){
+      restartPhotobooth();
     }
 
     function checkQuizEnd(){
@@ -1524,7 +1778,9 @@
         tab.style.display="none";
       });
 
-      document.getElementById(tabId).style.display="block";
+      const tabEl = document.getElementById(tabId);
+      if(!tabEl) return;
+      tabEl.style.display="block";
 
       // Check if letter tab is locked
       if(tabId === "letter"){
@@ -1537,6 +1793,7 @@
         }
       }
 
+      if(tabId === "photobooth") initPhotobooth();
       if(tabId === "song") startSongTyping();
       if(tabId === "flower") startFlowerTyping();
     }
